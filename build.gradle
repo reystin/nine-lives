@@ -1,0 +1,141 @@
+import groovy.json.JsonOutput
+
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+// ===== Вариант сборки: full (клиент + сервер) или server (только сервер) =====
+def variant = (project.findProperty('variant') ?: 'full').toString().toLowerCase()
+if (variant != 'full' && variant != 'server') {
+	throw new GradleException("Свойство -Pvariant должно быть full или server (сейчас: ${variant})")
+}
+def isFull = variant == 'full'
+
+version = "${mod_version}+mc${minecraft_version}"
+group = maven_group
+
+base {
+	archivesName = isFull ? modid : "${modid}-server"
+}
+
+repositories {
+	// Mod Menu (опциональная интеграция).
+	maven {
+		name = 'TerraformersMC'
+		url = 'https://maven.terraformersmc.com/releases/'
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${minecraft_version}"
+	// С 2026 jar Minecraft не обфусцирован: официальные имена Mojang доступны
+	// напрямую, блок mappings не нужен (см. шаблон fabric-example-mod 26.3).
+	implementation "net.fabricmc:fabric-loader:${loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+	// Mod Menu — только для компиляции, в jar не попадает (optional-зависимость).
+	compileOnly "com.terraformersmc:modmenu:${modmenu_version}"
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"${modid}" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+
+	// Отдельный запуск gametest-сервера (fabric-api.gametest).
+	runs {
+		gametestServer {
+			inherit server
+			server()
+			name "Gametest Server"
+			property "fabric-api.gametest", "true"
+			property "fabric-api.gametest.report-file", "${projectDir}/run/gametest-report.xml"
+		}
+
+		// Автосценарий скриншотов интерфейса (dev-only).
+		showcaseClient {
+			inherit client
+			name "Showcase Client"
+			property "ninelives.showcase", "true"
+		}
+
+		// Dev-проверка авто-установки BACAP (реальная загрузка с Modrinth).
+		showcaseBacapClient {
+			inherit client
+			name "Showcase BACAP Client"
+			property "ninelives.showcase", "true"
+			property "ninelives.showcase.bacap", "true"
+		}
+	}
+}
+
+// ===== Генерация fabric.mod.json под вариант =====
+// Серверная сборка не содержит client-entrypoint и client-mixin-конфига,
+// поэтому Fabric Loader и Mixin никогда не трогают отсутствующие классы.
+def modId = modid
+def modGroup = maven_group
+def modVersion = project.version.toString()
+def fabricModJson = tasks.register('fabricModJson') {
+	def outDir = layout.buildDirectory.dir('generated/fabricModJson')
+	outputs.dir(outDir)
+	inputs.property('variant', variant)
+	doLast {
+		def entrypoints = [main: ["${modGroup}.${modId}.NineLives"]]
+		entrypoints.'fabric-gametest' = ["${modGroup}.${modId}.gametest.NineLivesGameTests"]
+		if (isFull) {
+			entrypoints.client = ["${modGroup}.${modId}.client.NineLivesClient"]
+			entrypoints.modmenu = ["${modGroup}.${modId}.client.compat.ModMenuCompat"]
+		}
+		def mixins = ["${modId}.mixins.json"]
+		if (isFull) {
+			mixins << [config: "${modId}.client.mixins.json", environment: 'client']
+		}
+		def json = [
+			schemaVersion: 1,
+			id          : modId,
+			version     : modVersion,
+			name        : 'Nine Lives',
+			description : 'Everyone has one heart. Earn more lives through advancements and share them with friends.',
+			authors     : ['reystin'],
+			license     : 'MIT',
+			icon        : "assets/${modId}/icon.png",
+			environment : '*',
+			entrypoints : entrypoints,
+			mixins      : mixins,
+			depends     : [
+				fabricloader: '>=0.20.1',
+				minecraft   : '~26.3',
+				java        : '>=25',
+				'fabric-api': '*'
+			]
+		]
+		def dir = outDir.get().asFile
+		dir.mkdirs()
+		new File(dir, 'fabric.mod.json').text = JsonOutput.prettyPrint(JsonOutput.toJson(json))
+	}
+}
+sourceSets.main.resources.srcDir(fabricModJson)
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+	it.options.encoding = 'UTF-8'
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+// ===== Исключение клиентских классов из серверной сборки =====
+tasks.named('jar') {
+	if (!isFull) {
+		exclude "com/reystin/${modid}/client/**"
+		exclude 'ninelives.client.mixins.json'
+		exclude 'assets/ninelives/gui/**'
+		exclude 'assets/ninelives/textures/**'
+	}
+}
