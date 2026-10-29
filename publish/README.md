@@ -64,7 +64,7 @@ gh release create v1.0.0 \
 
 Все поля для веб-формы: `publish/modrinth/body.md` (описание, уже с пометкой об ИИ),
 `publish/modrinth/changelog.md` (changelog), `docs/images/icon-512.png` (иконка),
-`docs/images/banner.png` и `docs/images/en/*.png` (галерея). Параметры версии:
+`docs/images/banner-ninelives.png` и `docs/images/en/*.png` (галерея). Параметры версии:
 Minecraft 26.3, Fabric, release, зависимости Fabric API (required) и Mod Menu
 (optional).
 

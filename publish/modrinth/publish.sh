@@ -138,7 +138,7 @@ add_image() { # файл | заголовок | описание | featured | п
 	fi
 }
 
-add_image "$ROOT/docs/images/banner.png" "Nine Lives" "One heart. Nine lives." true 0
+add_image "$ROOT/docs/images/banner-ninelives.png" "Nine Lives" "One heart. Nine lives." true 0
 add_image "$ROOT/docs/images/en/ninelives_screen_overview.png" "Overview" "Lives, progress and mode" false 1
 add_image "$ROOT/docs/images/en/ninelives_screen_advancements.png" "Advancements" "Hard achievements and nearest progress" false 2
 add_image "$ROOT/docs/images/en/ninelives_mode_select.png" "Mode selection" "Vanilla or Blaze and Caves" false 3

@@ -186,8 +186,8 @@ def make_banner():
     edition = "FABRIC  /  MINECRAFT 26.3"
     draw_text(draw, edition, title_x + 4, 480, 3, 6, MUTED)
 
-    img.save(DOCS / "banner.png")
-    print("banner: docs/images/banner.png")
+    img.save(DOCS / "banner-ninelives.png")
+    print("banner: docs/images/banner-ninelives.png")
 
 
 def apply_source_artwork():
@@ -196,8 +196,8 @@ def apply_source_artwork():
     icon.save(DOCS / "icon-512.png")
     icon.resize((128, 128), Image.Resampling.LANCZOS).save(
         ROOT / "src/main/resources/assets/ninelives/icon.png")
-    Image.open(SRC / "banner.png").convert("RGB").save(DOCS / "banner.png")
-    print("artwork: docs/images/icon-512.png + src/main/resources/assets/ninelives/icon.png + docs/images/banner.png")
+    Image.open(SRC / "banner.png").convert("RGB").save(DOCS / "banner-ninelives.png")
+    print("artwork: docs/images/icon-512.png + src/main/resources/assets/ninelives/icon.png + docs/images/banner-ninelives.png")
 
 
 def main():

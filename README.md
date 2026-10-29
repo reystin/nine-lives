@@ -1,4 +1,4 @@
-![Nine Lives](docs/images/banner.png)
+![Nine Lives](docs/images/banner-ninelives.png)
 
 # Nine Lives
 
