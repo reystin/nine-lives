@@ -4,6 +4,7 @@
 
 [![Minecraft 26.3](https://img.shields.io/badge/Minecraft-26.3-3C8527?style=flat-square)](https://www.minecraft.net)
 [![Fabric](https://img.shields.io/badge/loader-Fabric-DBD0B4?style=flat-square)](https://fabricmc.net)
+[![Modrinth](https://img.shields.io/badge/Modrinth-ninelives-00AF5C?style=flat-square&logo=modrinth&logoColor=white)](https://modrinth.com/mod/ninelives)
 [![License MIT](https://img.shields.io/badge/license-MIT-2F80ED?style=flat-square)](LICENSE)
 [![AI-assisted](https://img.shields.io/badge/AI-assisted-8A2BE2?style=flat-square)](#ai-disclosure)
 
@@ -57,7 +58,7 @@ A Fabric mod for **Minecraft 26.3** (Java 25, Fabric Loader 0.20.1+, Fabric API)
 Requirements: Minecraft **26.3**, Fabric Loader **0.20.1+**, Fabric API, Java **25**.
 Mod Menu is optional (client settings screen).
 
-**Download:** [GitHub Releases](https://github.com/reystin/nine-lives/releases/latest).
+**Download:** [GitHub Releases](https://github.com/reystin/nine-lives/releases/latest) or [Modrinth](https://modrinth.com/mod/ninelives).
 
 | Build | File | Where to install |
 |---|---|---|
