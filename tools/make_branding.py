@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw, ImageFilter
 ROOT = Path(__file__).resolve().parent.parent
 GUI = ROOT / "src/client/resources/assets/ninelives/textures/gui"
 DOCS = ROOT / "docs/images"
+SRC = DOCS / "source"
 
 BG_TOP = (38, 7, 17)
 BG_BOTTOM = (16, 4, 10)
@@ -189,8 +190,21 @@ def make_banner():
     print("banner: docs/images/banner.png")
 
 
+def apply_source_artwork():
+    emblem = Image.open(SRC / "emblem.png").convert("RGBA")
+    icon = emblem.resize((512, 512), Image.Resampling.LANCZOS)
+    icon.save(DOCS / "icon-512.png")
+    icon.resize((128, 128), Image.Resampling.LANCZOS).save(
+        ROOT / "src/main/resources/assets/ninelives/icon.png")
+    Image.open(SRC / "banner.png").convert("RGB").save(DOCS / "banner.png")
+    print("artwork: docs/images/icon-512.png + src/main/resources/assets/ninelives/icon.png + docs/images/banner.png")
+
+
 def main():
     DOCS.mkdir(parents=True, exist_ok=True)
+    if (SRC / "emblem.png").exists() and (SRC / "banner.png").exists():
+        apply_source_artwork()
+        return
     make_icon()
     make_banner()
 
