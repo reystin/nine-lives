@@ -57,6 +57,8 @@ A Fabric mod for **Minecraft 26.3** (Java 25, Fabric Loader 0.20.1+, Fabric API)
 Requirements: Minecraft **26.3**, Fabric Loader **0.20.1+**, Fabric API, Java **25**.
 Mod Menu is optional (client settings screen).
 
+**Download:** [GitHub Releases](https://github.com/reystin/nine-lives/releases/latest).
+
 | Build | File | Where to install |
 |---|---|---|
 | Full (client + server) | `ninelives-1.0.0+mc26.3.jar` | Server **and every player**, or just `mods/` in singleplayer. Includes the whole interface. |
