@@ -1,3 +1,5 @@
+![Nine Lives](https://raw.githubusercontent.com/reystin/nine-lives/main/docs/images/banner-ninelives.png)
+
 # Nine Lives
 
 **Everyone has exactly one heart. Lives are earned with advancements, spent on death, and can be given to friends.**
